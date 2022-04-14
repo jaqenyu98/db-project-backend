@@ -5,4 +5,4 @@ jdk1.8+
 mysql  
 maven  
 # API Documentation:  
-localhost/swagger-ui/
+http://localhost/swagger-ui/
