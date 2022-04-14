@@ -22,7 +22,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //use LinkedHashMap instead of hashMap，because hashMap is unordered.
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/swagger-ui/", "anon");
+        filterMap.put("/swagger-ui/**", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/v3/**", "anon");
