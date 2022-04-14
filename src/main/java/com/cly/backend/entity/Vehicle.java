@@ -1,9 +1,6 @@
 package com.cly.backend.entity;
 
 import lombok.Data;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.Year;
 
 @Data

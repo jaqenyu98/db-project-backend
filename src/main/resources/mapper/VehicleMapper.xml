@@ -2,7 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cly.backend.mapper.VehicleMapper">
 
-
+    <select id="listVehiclesByFilter" resultType="Vehicle">
+        select t1.*
+        from cly_vehicle as t1
+        where t1.location_id = #{locationId}
+          and t1.id not in (select t2.vehicle_id
+                            from cly_customer_vehicle as t2
+                            where t1.id = t2.vehicle_id
+                              and pick_up_date &lt;= #{dropOffDate}
+                              and drop_off_date &gt;= #{pickUpDate}
+        )
+    </select>
 
 
 </mapper>

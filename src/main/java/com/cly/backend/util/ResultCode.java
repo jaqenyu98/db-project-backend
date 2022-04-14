@@ -2,9 +2,9 @@ package com.cly.backend.util;
 
 public enum ResultCode {
     SUCCESS(200, "Success."),
-    FAILED(500, "Failed."),
+    FAILED(500, "Internal server error for unknown reason."),
     VALIDATE_FAILED(404, "Parameters are invalid."),
-    UNAUTHORIZED(401, "Please login.");
+    UNAUTHORIZED(401, "Fail to authenticate.");
 
     private final Integer code;
     private final String msg;

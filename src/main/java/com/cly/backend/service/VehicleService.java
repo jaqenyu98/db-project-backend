@@ -1,13 +1,11 @@
-package com.cly.backend.mapper;
+package com.cly.backend.service;
 
 import com.cly.backend.entity.Location;
 import com.cly.backend.entity.Vehicle;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Mapper
-public interface VehicleMapper {
+public interface VehicleService {
     List<Vehicle> listVehiclesByFilter(Long locationId, LocalDateTime pickUpDate, LocalDateTime dropOffDate);
 }

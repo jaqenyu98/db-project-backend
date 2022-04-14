@@ -32,15 +32,20 @@ public class Result<T> {
     public static <T> Result<T> failed() {
         return new Result<>(ResultCode.FAILED.getCode(), ResultCode.FAILED.getMsg());
     }
+    public static <T> Result<T> failed(String msg) {
+        return new Result<>(ResultCode.FAILED.getCode(), msg);
+    }
 
     public static <T> Result<T> validateFailed(String msg) {
         return new Result<>(ResultCode.VALIDATE_FAILED.getCode(), msg);
     }
 
-    public static <T> Result<T> unauthorized(T data) {
-        return new Result<>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMsg(), data);
+    public static <T> Result<T> unauthorized() {
+        return new Result<>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMsg(), null);
     }
-
+    public static <T> Result<T> unauthorized(String msg) {
+        return new Result<>(ResultCode.UNAUTHORIZED.getCode(), msg, null);
+    }
     private Result(Integer code, String msg) {
         this.code = code;
         this.msg = msg;

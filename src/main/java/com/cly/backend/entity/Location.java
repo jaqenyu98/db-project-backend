@@ -11,4 +11,5 @@ public class Location {
     private String city;
     private String state;
     private String zipcode;
+    private String phoneNumber;
 }

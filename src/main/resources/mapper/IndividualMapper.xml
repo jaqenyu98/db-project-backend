@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cly.backend.mapper.IndividualMapper">
+
+    <insert id="individualRegister">
+        insert into cly_individual(id, first_name, last_name, insurance_company_name, insurance_policy_number, driver_license_number)
+        values(#{id}, #{firstName}, #{lastName}, #{insuranceCompanyName}, #{insurancePolicyNumber}, #{driverLicenseNumber})
+    </insert>
+
+
+</mapper>

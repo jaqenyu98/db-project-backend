@@ -13,7 +13,7 @@ public class LocationServiceImpl implements LocationService {
     @Autowired
     private LocationMapper locationMapper;
     @Override
-    public List<Location> listLocations() {
-        return locationMapper.listLocations();
+    public List<Location> listAllLocations() {
+        return locationMapper.listAllLocations();
     }
 }
