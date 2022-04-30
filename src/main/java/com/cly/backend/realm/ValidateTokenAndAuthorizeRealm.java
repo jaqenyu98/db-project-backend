@@ -1,7 +1,7 @@
 package com.cly.backend.realm;
 
 import com.cly.backend.entity.JwtUser;
-import com.cly.backend.util.JwtUtil;
+import com.cly.backend.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.apache.shiro.authc.*;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidateTokenAndAuthorizeRealm extends AuthorizingRealm {
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtils jwtUtils;
 
     public ValidateTokenAndAuthorizeRealm() {
         super();
@@ -33,6 +33,9 @@ public class ValidateTokenAndAuthorizeRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         JwtUser jwtUser = (JwtUser)principals.getPrimaryPrincipal();
+        // Complicated Authorization: store role and permission into database.
+        // Long id = jwtUser.getId();
+        // Set<String> permsSet = shiroService.getUserPermissions(userId);
         info.addRole(jwtUser.getRole());
         return info;
     }
@@ -41,13 +44,12 @@ public class ValidateTokenAndAuthorizeRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException, JwtException {
         BearerToken bearerToken = (BearerToken) token;
         String jwtToken = bearerToken.getToken();
-        Claims claims = jwtUtil.getClaimByToken(jwtToken);
+        Claims claims = jwtUtils.getClaimByToken(jwtToken);
+        // judge whether token is tampered with or expired.
         if (claims == null)
             throw new JwtException("Invalid token.");
-
         JwtUser jwtUser = new JwtUser(Long.parseLong(claims.getSubject()), claims.get("role").toString());
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(jwtUser, claims.getSubject(), getName());
-
         return info;
     }
 }

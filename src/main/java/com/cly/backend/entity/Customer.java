@@ -15,4 +15,8 @@ public class Customer {
     private String phoneNumber;
     private String customerType;
     private String salt;
+
+    public static final String INDIVIDUAL = "I";
+    public static final String CORPORATE = "C";
+    public static final String ADMIN = "A";
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cly.backend.mapper.CustomerVehicleMapper">
+
+<!--    private Long id;-->
+<!--    private Long customerId;-->
+<!--    private Long vehicleId;-->
+<!--    private Long pickUpLocationId;-->
+<!--    private Long dropOffLocationId;-->
+<!--    private String pickUpDate;-->
+<!--    private String dropOffDate;-->
+<!--    private Integer startOdometer;-->
+<!--    private Integer endOdometer;-->
+<!--    private Integer dailyOdometerLimit;-->
+<!--    private Long couponId;-->
+<!--    private Integer status;-->
+    <insert id="reserve" useGeneratedKeys="true" keyProperty="id">
+        insert into cly_customer_vehicle(id, customer_id, vehicle_id, pick_up_location_id, drop_off_location_id,
+                                         pick_up_date, drop_off_date, start_odometer, end_odometer, daily_odometer_limit, coupon_id, status)
+        values(null, #{customerId}, #{vehicleId}, #{pickUpLocationId}, #{dropOffLocationId},
+               #{pickUpDate}, #{dropOffDate}, null, null, #{dailyOdometerLimit}, #{couponId}, #{status})
+    </insert>
+
+    <update id="updateOrderWhenPickUp">
+        update cly_customer_vehicle
+        set start_odometer = #{startOdometer}, status = 2
+        where id = #{id}
+    </update>
+
+    <update id="updateOrderWhenDropOff">
+        update cly_customer_vehicle
+        set end_odometer = #{endOdometer}, status = 2
+        where id = #{id}
+    </update>
+
+    <select id="listReservedOrders" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle where customer_id = #{customerId} and status = 0
+    </select>
+    <select id="listPickedUpOrders" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle where customer_id = #{customerId} and status = 1
+    </select>
+    <select id="listDroppedOffOrders" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle where customer_id = #{customerId} and status = 2
+    </select>
+    <select id="listPaidOrders" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle where customer_id = #{customerId} and status = 3
+    </select>
+
+</mapper>

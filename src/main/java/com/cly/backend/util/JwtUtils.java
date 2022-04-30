@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class JwtUtil {
+public class JwtUtils {
     @Value("${jwt.header}")
     private String header;
 
@@ -29,6 +29,7 @@ public class JwtUtil {
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime()+expireTime*60*1000);
         Map<String, Object> claims = new HashMap<>();
+        //we could use "subject.getPrinc"
         claims.put("sub", jwtUser.getId().toString());
         claims.put("role", jwtUser.getRole());
         return Jwts.builder()

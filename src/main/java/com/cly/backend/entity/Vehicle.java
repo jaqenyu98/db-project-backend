@@ -9,7 +9,7 @@ public class Vehicle {
     private String vin;
     private String make;
     private String model;
-    private Year year;
+    private String year;
     private String licensePlate;
     private Long locationId;
     private Long vehicleCategoryId;

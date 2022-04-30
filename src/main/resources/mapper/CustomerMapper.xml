@@ -11,4 +11,25 @@
         values(#{username}, #{password}, #{email}, #{phoneNumber}, #{customerType}, #{salt})
     </insert>
 
+    <select id="getCustomerById" resultType="Customer">
+        select *
+        from cly_customer
+        where id = #{id}
+    </select>
+
+    <select id="checkUsername" resultType="int">
+        select count(*) from cly_customer where username = #{username}
+    </select>
+    <select id="checkEmail" resultType="int">
+        select count(*) from cly_customer where email = #{email}
+    </select>
+    <select id="checkPhoneNumber" resultType="int">
+        select count(*) from cly_customer where phone_number = #{phoneNumber}
+    </select>
+
+    <update id="updateAddress">
+        update cly_customer
+        set street = #{street}, city = #{city}, state = #{state}, zipcode = #{zipcode}
+        where id = #{id}
+    </update>
 </mapper>

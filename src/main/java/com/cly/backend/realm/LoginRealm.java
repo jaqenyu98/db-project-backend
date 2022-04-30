@@ -46,13 +46,13 @@ public class LoginRealm extends AuthenticatingRealm {
         jwtUser.setId(customer.getId());
         String customerType = customer.getCustomerType();
         switch (customerType) {
-            case "I":
+            case Customer.INDIVIDUAL:
                 jwtUser.setRole("individual");
                 break;
-            case "C":
+            case Customer.CORPORATE:
                 jwtUser.setRole("corporate");
                 break;
-            case "A":
+            case Customer.ADMIN:
                 jwtUser.setRole("admin");
                 break;
         }

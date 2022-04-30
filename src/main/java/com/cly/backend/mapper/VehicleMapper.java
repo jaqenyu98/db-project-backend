@@ -9,5 +9,5 @@ import java.util.List;
 
 @Mapper
 public interface VehicleMapper {
-    List<Vehicle> listVehiclesByFilter(Long locationId, LocalDateTime pickUpDate, LocalDateTime dropOffDate);
+    List<Vehicle> listVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate);
 }

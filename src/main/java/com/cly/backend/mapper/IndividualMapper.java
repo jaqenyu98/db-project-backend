@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface IndividualMapper {
     void individualRegister(Individual individual);
+    Integer checkDriverLicenseNumber(String driverLicenseNumber);
 }

@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface VehicleService {
-    List<Vehicle> listVehiclesByFilter(Long locationId, LocalDateTime pickUpDate, LocalDateTime dropOffDate);
+    List<Vehicle> listVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate);
 }

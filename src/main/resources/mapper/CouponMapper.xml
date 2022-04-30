@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cly.backend.mapper.CouponMapper">
+
+    <insert id="insertCoupon" useGeneratedKeys="true" keyProperty="id">
+        insert into cly_coupon
+        values(null, #{discount}, #{description}, #{startDate}, #{endDate}, 0, #{individualId})
+    </insert>
+
+    <select id="listValidCoupons" resultType="Coupon">
+        select * from cly_coupon where individual_id = #{individualId} and status = 0
+    </select>
+    <select id="listUsedCoupons" resultType="Coupon">
+        select * from cly_coupon where individual_id = #{individualId} and status = 1
+    </select>
+    <select id="listInvalidCoupons" resultType="Coupon">
+        select * from cly_coupon where individual_id = #{individualId} and status = 2
+    </select>
+
+    <select id="getCoupon" resultType="Coupon">
+        select * from cly_coupon where id = #{id}
+    </select>
+
+    <update id="setStatus">
+        update cly_coupon
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+</mapper>
