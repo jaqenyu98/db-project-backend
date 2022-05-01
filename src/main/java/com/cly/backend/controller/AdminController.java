@@ -41,6 +41,7 @@ public class AdminController {
         String jwtToken = jwtUtils.createToken(jwtUser);
         Map<String, String> map = new HashMap<>();
         map.put("token", jwtToken);
+        map.put("role", jwtUser.getRole());
         return Result.success(map);
     }
 
