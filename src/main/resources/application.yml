@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cly_db_project
-    username: root
-    password: root
+    url: jdbc:mysql://wow-car-rental.c8qm8sy6o9um.us-east-1.rds.amazonaws.com:3306/wowdb
+    username: admin
+    password: DBfinalproject
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
