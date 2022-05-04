@@ -30,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime dropOffDate = LocalDateTime.parse(form.getDropOffDate(), formatter);
         if (dropOffDate.compareTo(pickUpDate) <= 0)
             throw new BusinessException("Drop off date should be later than pick up date!");
+        if(!isVehicleAvailable(form.getVehicleId(), pickUpDate, dropOffDate))
+            throw new BusinessException("This vehicle is unavailable.");
         CustomerVehicle order = new CustomerVehicle();
         order.setPickUpLocationId(form.getPickUpLocationId());
         order.setDropOffLocationId(form.getDropOffLocationId());
@@ -75,4 +77,20 @@ public class OrderServiceImpl implements OrderService {
     public List<CustomerVehicle> listPaidOrders(Long customerId) {
         return customerVehicleMapper.listPaidOrders(customerId);
     }
+
+    private boolean isVehicleAvailable(Long vehicleId, LocalDateTime pickUpDate, LocalDateTime dropOffDate) {
+        List<CustomerVehicle> uncompletedOrders = customerVehicleMapper.listUncompletedOrdersByVehicleId(vehicleId);
+        if (uncompletedOrders == null)
+            return true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (CustomerVehicle order: uncompletedOrders) {
+            LocalDateTime reservedPickUpDate = LocalDateTime.parse(order.getPickUpDate(), formatter);
+            LocalDateTime reservedDropOffDate = LocalDateTime.parse(order.getDropOffDate(), formatter);
+            //reserved: pick_up_date <= #{dropOffDate} && drop_off_date >= #{pickUpDate}
+            if (pickUpDate.compareTo(reservedDropOffDate)<=0 && dropOffDate.compareTo(reservedPickUpDate)>=0)
+                return false;
+        }
+        return true;
+    }
+
 }

@@ -2,17 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cly.backend.mapper.VehicleMapper">
 
-    <select id="listVehiclesByFilter" resultType="Vehicle">
-        select t1.*
-        from cly_vehicle as t1
+    <resultMap id="vehicleMap" type="Vehicle">
+        <id column="id" property="id"/>
+        <result column="vin" property="vin"/>
+        <result column="make" property="make"/>
+        <result column="model" property="model"/>
+        <result column="year" property="year"/>
+        <result column="license_plate" property="licensePlate"/>
+        <result column="location_id" property="locationId"/>
+        <result column="vehicle_category_id" property="vehicleCategoryId"/>
+        <association property="vehicleCategory" javaType="VehicleCategory">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="daily_rate" property="dailyRate"/>
+            <result column="over_mileage_rate" property="overMileageRate"/>
+        </association>
+    </resultMap>
+
+    <select id="listVehiclesByFilter" resultMap="vehicleMap">
+        select t1.*, t3.*
+        from cly_vehicle as t1 join cly_vehicle_category as t3
+        on t1.vehicle_category_id = t3.id
         where t1.location_id = #{locationId}
           and t1.id not in (select t2.vehicle_id
                             from cly_customer_vehicle as t2
-                            where t1.id = t2.vehicle_id
+                            where t2.status != 3
+                              and t1.id = t2.vehicle_id
                               and pick_up_date &lt;= #{dropOffDate}
                               and drop_off_date &gt;= #{pickUpDate}
         )
     </select>
 
+    <select id="getVehicleById" resultMap="vehicleMap">
+        select t1.*, t2.*
+        from cly_vehicle as t1 join cly_vehicle_category as t2
+        on t1.vehicle_category_id = t2.id
+        where t1.id = #{id}
+    </select>
 
 </mapper>

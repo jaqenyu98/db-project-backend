@@ -5,6 +5,7 @@
 <!--    private Long id;-->
 <!--    private Long customerId;-->
 <!--    private Long vehicleId;-->
+<!--    private Vehicle vehicle;-->
 <!--    private Long pickUpLocationId;-->
 <!--    private Long dropOffLocationId;-->
 <!--    private String pickUpDate;-->
@@ -14,6 +15,22 @@
 <!--    private Integer dailyOdometerLimit;-->
 <!--    private Long couponId;-->
 <!--    private Integer status;-->
+    <resultMap id="orderMap" type="CustomerVehicle">
+        <id column="id" property="id"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="vehicle_id" property="vehicleId"/>
+        <result property="pickUpLocationId" column="pick_up_location_id"/>
+        <result property="dropOffLocationId" column="drop_off_location_id"/>
+        <result property="pickUpDate" column="pick_up_date"/>
+        <result property="dropOffDate" column="drop_off_date"/>
+        <result property="startOdometer" column="start_odometer"/>
+        <result property="endOdometer" column="end_odometer"/>
+        <result property="dailyOdometerLimit" column="daily_odometer_limit"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="status" column="status"/>
+        <association property="vehicle" javaType="Vehicle" column="vehicle_id" select="com.cly.backend.mapper.VehicleMapper.getVehicleById"/>
+    </resultMap>
+
     <insert id="reserve" useGeneratedKeys="true" keyProperty="id">
         insert into cly_customer_vehicle(id, customer_id, vehicle_id, pick_up_location_id, drop_off_location_id,
                                          pick_up_date, drop_off_date, start_odometer, end_odometer, daily_odometer_limit, coupon_id, status)
@@ -33,17 +50,22 @@
         where id = #{id}
     </update>
 
-    <select id="listReservedOrders" resultType="CustomerVehicle">
+    <select id="listReservedOrders" resultMap="orderMap">
         select * from cly_customer_vehicle where customer_id = #{customerId} and status = 0
     </select>
-    <select id="listPickedUpOrders" resultType="CustomerVehicle">
+    <select id="listPickedUpOrders" resultMap="orderMap">
         select * from cly_customer_vehicle where customer_id = #{customerId} and status = 1
     </select>
-    <select id="listDroppedOffOrders" resultType="CustomerVehicle">
+    <select id="listDroppedOffOrders" resultMap="orderMap">
         select * from cly_customer_vehicle where customer_id = #{customerId} and status = 2
     </select>
-    <select id="listPaidOrders" resultType="CustomerVehicle">
+    <select id="listPaidOrders" resultMap="orderMap">
         select * from cly_customer_vehicle where customer_id = #{customerId} and status = 3
+    </select>
+
+    <select id="listUncompletedOrdersByVehicleId" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle
+        where status != 3 and vehicle_id = #{vehicle_id}
     </select>
 
 </mapper>

@@ -24,6 +24,6 @@ jwt:
   header: Authorization
   secret: cly-db-project-backend
   #unit: minutes
-  expireTime: 30
+  expireTime: 1440
 
 

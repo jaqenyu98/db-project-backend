@@ -1,7 +1,6 @@
 package com.cly.backend.entity;
 
 import lombok.Data;
-import java.time.Year;
 
 @Data
 public class Vehicle {
@@ -13,4 +12,5 @@ public class Vehicle {
     private String licensePlate;
     private Long locationId;
     private Long vehicleCategoryId;
+    private VehicleCategory vehicleCategory;
 }

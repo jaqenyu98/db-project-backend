@@ -14,4 +14,5 @@ public interface CustomerVehicleMapper {
     List<CustomerVehicle> listPickedUpOrders(Long customerId);
     List<CustomerVehicle> listDroppedOffOrders(Long customerId);
     List<CustomerVehicle> listPaidOrders(Long customerId);
+    List<CustomerVehicle> listUncompletedOrdersByVehicleId(Long vehicleId);
 }

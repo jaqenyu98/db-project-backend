@@ -81,4 +81,9 @@ public class CustomerController {
         return Result.success();
     }
 
+//    @PutMapping("password")
+//    public Result changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+//
+//    }
+
 }

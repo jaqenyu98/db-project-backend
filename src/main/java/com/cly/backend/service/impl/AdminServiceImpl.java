@@ -43,6 +43,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void insertCoupon(Coupon coupon) {
+        coupon.setStartDate(coupon.getStartDate() + " 00:00:00");
+        coupon.setEndDate(coupon.getEndDate() + " 23:59:59");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDate = LocalDateTime.parse(coupon.getStartDate(), formatter);
         LocalDateTime endDate = LocalDateTime.parse(coupon.getEndDate(), formatter);
@@ -62,9 +64,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void assignDiscount(Long id, BigDecimal discount) throws BusinessException{
+    public void assignDiscount(Long id, BigDecimal discount) throws BusinessException {
         Customer customer = customerMapper.getCustomerById(id);
-        if(customer == null)
+        if (customer == null)
             throw new BusinessException("Cannot find this customer!");
         else if (!Customer.CORPORATE.equals(customer.getCustomerType()))
             throw new BusinessException("Must assign a discount to an existed corporate customer.");
