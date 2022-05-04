@@ -10,4 +10,5 @@ public interface CustomerService {
     Long individualRegister(IndividualRegisterForm form);
     Long corporateRegister(CorporateRegisterForm form);
     void updateAddress(Long id, String street, String city, String state, String zipcode);
+    void updatePassword(Long id, String oldPassword, String newPassword);
 }

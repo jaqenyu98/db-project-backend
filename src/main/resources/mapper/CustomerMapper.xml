@@ -32,4 +32,10 @@
         set street = #{street}, city = #{city}, state = #{state}, zipcode = #{zipcode}
         where id = #{id}
     </update>
+
+    <update id="updatePassword">
+        update cly_customer
+        set password = #{newPassword}
+        where id = #{id}
+    </update>
 </mapper>

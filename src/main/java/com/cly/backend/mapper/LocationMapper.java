@@ -9,4 +9,5 @@ import java.util.List;
 public interface LocationMapper {
 
     List<Location> listAllLocations();
+    Location getLocationById(Long id);
 }

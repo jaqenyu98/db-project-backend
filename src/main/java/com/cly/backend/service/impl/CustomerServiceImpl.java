@@ -84,6 +84,18 @@ public class CustomerServiceImpl implements CustomerService {
         customerMapper.updateAddress(id, street, city, state, zipcode);
     }
 
+    @Override
+    public void updatePassword(Long id, String oldPassword, String newPassword) throws BusinessException{
+        Customer customer = customerMapper.getCustomerById(id);
+        String oldEncryptedPassword = ShiroUtils.Sha256Hash(oldPassword, customer.getSalt());
+        if (!oldEncryptedPassword.equals(customer.getPassword()))
+            throw new BusinessException("Old password is wrong!");
+        String newEncryptedPassword = ShiroUtils.Sha256Hash(newPassword, customer.getSalt());
+        if (oldEncryptedPassword.equals(newEncryptedPassword))
+            throw new BusinessException("The new password cannot be the same as the old password!");
+        customerMapper.updatePassword(id, newEncryptedPassword);
+    }
+
     private void checkIndividualRegister(IndividualRegisterForm form) throws BusinessException{
         if (customerMapper.checkUsername(form.getUsername()) >= 1)
             throw new BusinessException("Duplicated username!");

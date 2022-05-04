@@ -29,6 +29,8 @@
         <result property="couponId" column="coupon_id"/>
         <result property="status" column="status"/>
         <association property="vehicle" javaType="Vehicle" column="vehicle_id" select="com.cly.backend.mapper.VehicleMapper.getVehicleById"/>
+        <association property="pickUpLocation" javaType="Location" column="pick_up_location_id" select="com.cly.backend.mapper.LocationMapper.getLocationById"/>
+        <association property="dropOffLocation" javaType="Location" column="drop_off_location_id" select="com.cly.backend.mapper.LocationMapper.getLocationById"/>
     </resultMap>
 
     <insert id="reserve" useGeneratedKeys="true" keyProperty="id">

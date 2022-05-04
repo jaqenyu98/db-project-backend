@@ -81,9 +81,11 @@ public class CustomerController {
         return Result.success();
     }
 
-//    @PutMapping("password")
-//    public Result changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
-//
-//    }
+    @PutMapping("password")
+    public Result changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        Long id = ShiroUtils.getId();
+        customerService.updatePassword(id, oldPassword, newPassword);
+        return Result.success();
+    }
 
 }

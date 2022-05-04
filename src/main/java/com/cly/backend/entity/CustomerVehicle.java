@@ -24,6 +24,8 @@ public class CustomerVehicle {
     //'0 for reserved, 1 for picked up, 2 for returned, 3 for paid.'
     private Integer status;
     private Vehicle vehicle;
+    private Location pickUpLocation;
+    private Location dropOffLocation;
 
     public static final int RESERVED = 0;
     public static final int PICKED_UP = 1;

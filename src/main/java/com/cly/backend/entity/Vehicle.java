@@ -13,4 +13,5 @@ public class Vehicle {
     private Long locationId;
     private Long vehicleCategoryId;
     private VehicleCategory vehicleCategory;
+    private Location location;
 }

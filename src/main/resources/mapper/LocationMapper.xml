@@ -6,5 +6,9 @@
         SELECT * FROM cly_location
     </select>
 
+    <select id="getLocationById" resultType="Location">
+        select * from cly_location where id = #{id}
+    </select>
+
 
 </mapper>

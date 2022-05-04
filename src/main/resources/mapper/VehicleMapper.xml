@@ -17,6 +17,7 @@
             <result column="daily_rate" property="dailyRate"/>
             <result column="over_mileage_rate" property="overMileageRate"/>
         </association>
+        <association property="location" javaType="Location" column="location_id" select="com.cly.backend.mapper.LocationMapper.getLocationById"/>
     </resultMap>
 
     <select id="listVehiclesByFilter" resultMap="vehicleMap">

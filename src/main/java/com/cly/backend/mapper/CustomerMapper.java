@@ -12,4 +12,5 @@ public interface CustomerMapper {
     Integer checkEmail(String email);
     Integer checkPhoneNumber(String phoneNumber);
     void updateAddress(Long id, String street, String city, String state, String zipcode);
+    void updatePassword(Long id, String newPassword);
 }
