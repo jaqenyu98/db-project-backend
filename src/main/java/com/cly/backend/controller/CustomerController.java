@@ -10,6 +10,7 @@ import com.cly.backend.util.Result;
 import com.cly.backend.util.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -81,6 +82,11 @@ public class CustomerController {
         return Result.success();
     }
 
+    @ApiOperation("Change password")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "oldPassword", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "newPassword", dataTypeClass = String.class)
+    })
     @PutMapping("password")
     public Result changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         Long id = ShiroUtils.getId();

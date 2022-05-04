@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cly.backend.mapper.InvoiceMapper">
+    <resultMap id="invoiceMap" type="Invoice">
+        <id column="id" property="id"/>
+        <result column="create_date" property="createDate"/>
+        <result column="amount" property="amount"/>
+        <collection property="payments" ofType="Payment" column="id" select="com.cly.backend.mapper.PaymentMapper.listPaymentsByInvoiceId"/>
+    </resultMap>
+
+    <select id="getInvoiceByOrderId" resultMap="invoiceMap">
+        select * from cly_invoice where customer_vehicle_id = #{customerVehicleId}
+    </select>
+    
+</mapper>

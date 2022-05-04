@@ -26,6 +26,7 @@ public class CustomerVehicle {
     private Vehicle vehicle;
     private Location pickUpLocation;
     private Location dropOffLocation;
+    private Invoice invoice;
 
     public static final int RESERVED = 0;
     public static final int PICKED_UP = 1;

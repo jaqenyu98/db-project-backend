@@ -2,6 +2,7 @@ package com.cly.backend.service.impl;
 
 import com.cly.backend.entity.Coupon;
 import com.cly.backend.entity.Customer;
+import com.cly.backend.entity.CustomerVehicle;
 import com.cly.backend.exception.BusinessException;
 import com.cly.backend.mapper.CorporateMapper;
 import com.cly.backend.mapper.CouponMapper;
@@ -55,12 +56,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void updateOrderWhenPickUp(Long id, Integer startOdometer) {
-        customerVehicleMapper.updateOrderWhenPickUp(id, startOdometer);
+        customerVehicleMapper.updateOrderWhenPickUp(id, startOdometer, CustomerVehicle.PICKED_UP);
     }
 
     @Override
     public void updateOrderWhenDropOff(Long id, Integer endOdometer) {
-        customerVehicleMapper.updateOrderWhenDropOff(id, endOdometer);
+        customerVehicleMapper.updateOrderWhenDropOff(id, endOdometer, CustomerVehicle.DROPPED_OFF);
     }
 
     @Override

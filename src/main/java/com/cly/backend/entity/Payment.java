@@ -2,12 +2,15 @@ package com.cly.backend.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class Payment {
     private Long id;
     private String method;
     private String paymentDate;
     private String cardNumber;
+    private BigDecimal amount;
     private Long invoiceId;
 
     public static final String METHOD_CREDIT_CARD = "C";

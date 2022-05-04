@@ -2,19 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cly.backend.mapper.CustomerVehicleMapper">
 
-<!--    private Long id;-->
-<!--    private Long customerId;-->
-<!--    private Long vehicleId;-->
-<!--    private Vehicle vehicle;-->
-<!--    private Long pickUpLocationId;-->
-<!--    private Long dropOffLocationId;-->
-<!--    private String pickUpDate;-->
-<!--    private String dropOffDate;-->
-<!--    private Integer startOdometer;-->
-<!--    private Integer endOdometer;-->
-<!--    private Integer dailyOdometerLimit;-->
-<!--    private Long couponId;-->
-<!--    private Integer status;-->
     <resultMap id="orderMap" type="CustomerVehicle">
         <id column="id" property="id"/>
         <result column="customer_id" property="customerId"/>
@@ -31,6 +18,7 @@
         <association property="vehicle" javaType="Vehicle" column="vehicle_id" select="com.cly.backend.mapper.VehicleMapper.getVehicleById"/>
         <association property="pickUpLocation" javaType="Location" column="pick_up_location_id" select="com.cly.backend.mapper.LocationMapper.getLocationById"/>
         <association property="dropOffLocation" javaType="Location" column="drop_off_location_id" select="com.cly.backend.mapper.LocationMapper.getLocationById"/>
+        <association property="invoice" javaType="Invoice" column="id" select="com.cly.backend.mapper.InvoiceMapper.getInvoiceByOrderId"/>
     </resultMap>
 
     <insert id="reserve" useGeneratedKeys="true" keyProperty="id">
@@ -42,13 +30,13 @@
 
     <update id="updateOrderWhenPickUp">
         update cly_customer_vehicle
-        set start_odometer = #{startOdometer}, status = 2
+        set start_odometer = #{startOdometer}, status = #{status}
         where id = #{id}
     </update>
 
     <update id="updateOrderWhenDropOff">
         update cly_customer_vehicle
-        set end_odometer = #{endOdometer}, status = 2
+        set end_odometer = #{endOdometer}, status = #{status}
         where id = #{id}
     </update>
 
@@ -69,5 +57,11 @@
         select * from cly_customer_vehicle
         where status != 3 and vehicle_id = #{vehicle_id}
     </select>
+
+    <update id="setOrderStatus">
+        update cly_customer_vehicle
+        set status = #{status}
+        where id = #{id}
+    </update>
 
 </mapper>

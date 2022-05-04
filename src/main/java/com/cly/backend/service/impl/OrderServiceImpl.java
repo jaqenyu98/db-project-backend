@@ -2,15 +2,19 @@ package com.cly.backend.service.impl;
 
 import com.cly.backend.entity.Coupon;
 import com.cly.backend.entity.CustomerVehicle;
+import com.cly.backend.entity.Payment;
 import com.cly.backend.exception.BusinessException;
 import com.cly.backend.form.OrderForm;
 import com.cly.backend.mapper.CouponMapper;
 import com.cly.backend.mapper.CustomerVehicleMapper;
+import com.cly.backend.mapper.InvoiceMapper;
+import com.cly.backend.mapper.PaymentMapper;
 import com.cly.backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -21,6 +25,10 @@ public class OrderServiceImpl implements OrderService {
     private CustomerVehicleMapper customerVehicleMapper;
     @Autowired
     private CouponMapper couponMapper;
+    @Autowired
+    private PaymentMapper paymentMapper;
+    @Autowired
+    private InvoiceMapper invoiceMapper;
 
     @Override
     @Transactional
@@ -76,6 +84,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<CustomerVehicle> listPaidOrders(Long customerId) {
         return customerVehicleMapper.listPaidOrders(customerId);
+    }
+
+    @Override
+    @Transactional
+    public void makePayments(Long customerVehicleId, List<Payment> payments) throws BusinessException{
+        Long invoiceId = payments.get(0).getInvoiceId();
+        BigDecimal invoiceAmount = invoiceMapper.getInvoiceByOrderId(invoiceId).getAmount();
+        BigDecimal totalPaymentAmount = BigDecimal.ZERO;
+        for (Payment payment: payments) {
+            totalPaymentAmount = payment.getAmount().add(totalPaymentAmount);
+        }
+        if (totalPaymentAmount.compareTo(invoiceAmount)!=0)
+            throw new BusinessException("The total payment amount should equal to the invoice amount!");
+        for (Payment payment: payments) {
+            paymentMapper.insertPayment(payment);
+        }
+        customerVehicleMapper.setOrderStatus(customerVehicleId, CustomerVehicle.PAID);
     }
 
     private boolean isVehicleAvailable(Long vehicleId, LocalDateTime pickUpDate, LocalDateTime dropOffDate) {
