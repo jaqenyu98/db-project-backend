@@ -1,5 +1,6 @@
 package com.cly.backend.config;
 
+import com.cly.backend.filter.CorsAnonymousFilter;
 import com.cly.backend.filter.JwtFilter;
 import org.apache.shiro.authz.Authorizer;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
@@ -21,16 +22,17 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //use LinkedHashMap instead of hashMap，because hashMap is unordered.
-        Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/swagger-ui/**", "anon");
-        filterMap.put("/webjars/**", "anon");
-        filterMap.put("/swagger-resources/**", "anon");
-        filterMap.put("/v3/**", "anon");
-        filterMap.put("/customers/register/**", "anon");
-        filterMap.put("/customers/login", "anon");
         Map<String, Filter> myFilters = new LinkedHashMap<>();
+        myFilters.put("cors", new CorsAnonymousFilter());
         myFilters.put("jwt", new JwtFilter());
         shiroFilterFactoryBean.setFilters(myFilters);
+        Map<String, String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/swagger-ui/**", "cors");
+        filterMap.put("/webjars/**", "cors");
+        filterMap.put("/swagger-resources/**", "cors");
+        filterMap.put("/v3/**", "cors");
+        filterMap.put("/customers/register/**", "cors");
+        filterMap.put("/customers/login", "cors");
         filterMap.put("/**", "jwt");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 
