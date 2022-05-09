@@ -33,6 +33,20 @@
                               and drop_off_date &gt;= #{pickUpDate}
         )
     </select>
+    <select id="listSortedVehiclesByFilter" resultMap="vehicleMap">
+        select t1.*, t3.*
+        from cly_vehicle as t1 join cly_vehicle_category as t3
+                                    on t1.vehicle_category_id = t3.id
+        where t1.location_id = #{locationId}
+          and t1.id not in (select t2.vehicle_id
+                            from cly_customer_vehicle as t2
+                            where t2.status != 3
+                              and t1.id = t2.vehicle_id
+                              and pick_up_date &lt;= #{dropOffDate}
+                              and drop_off_date &gt;= #{pickUpDate}
+        )
+        order by t3.daily_rate
+    </select>
 
     <select id="getVehicleById" resultMap="vehicleMap">
         select t1.*, t2.*

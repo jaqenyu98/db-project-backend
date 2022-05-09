@@ -10,6 +10,7 @@ import com.cly.backend.mapper.CustomerVehicleMapper;
 import com.cly.backend.mapper.InvoiceMapper;
 import com.cly.backend.mapper.PaymentMapper;
 import com.cly.backend.service.OrderService;
+import com.cly.backend.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime dropOffDate = LocalDateTime.parse(form.getDropOffDate(), formatter);
         if (dropOffDate.compareTo(pickUpDate) <= 0)
             throw new BusinessException("Drop off date should be later than pick up date!");
-        if(!isVehicleAvailable(form.getVehicleId(), pickUpDate, dropOffDate))
+        if (!isVehicleAvailable(form.getVehicleId(), pickUpDate, dropOffDate))
             throw new BusinessException("This vehicle is unavailable.");
         CustomerVehicle order = new CustomerVehicle();
         order.setPickUpLocationId(form.getPickUpLocationId());
@@ -51,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         if (form.getCouponId() != null) {
             Long couponId = form.getCouponId();
             Coupon coupon = couponMapper.getCoupon(couponId);
-            switch(coupon.getStatus()) {
+            switch (coupon.getStatus()) {
                 case Coupon.VALID:
                     order.setCouponId(form.getCouponId());
                     couponMapper.setStatus(couponId, Coupon.USED);
@@ -88,16 +89,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void makePayments(Long customerVehicleId, List<Payment> payments) throws BusinessException{
+    public void makePayments(Long customerVehicleId, List<Payment> payments) throws BusinessException {
+        CustomerVehicle order = customerVehicleMapper.getOrderById(customerVehicleId);
+        if (order == null || !order.getCustomerId().equals(ShiroUtils.getId()))
+            throw new BusinessException("Please enter the correct customerVehicleId");
+        if (order.getStatus()!=CustomerVehicle.DROPPED_OFF)
+            throw new BusinessException("The order status must be dropped-off!");
         Long invoiceId = payments.get(0).getInvoiceId();
         BigDecimal invoiceAmount = invoiceMapper.getInvoiceByOrderId(invoiceId).getAmount();
         BigDecimal totalPaymentAmount = BigDecimal.ZERO;
-        for (Payment payment: payments) {
+        for (Payment payment : payments) {
+            String method = payment.getMethod();
+            if (!Payment.METHOD_CREDIT_CARD.equals(method) && !Payment.METHOD_DEBIT_CARD.equals(method) && !Payment.METHOD_GIFT_CARD.equals(method))
+                throw new BusinessException("Allowed method input: C, D, and G. C for credit card, D for debit card, and G for gift card.");
             totalPaymentAmount = payment.getAmount().add(totalPaymentAmount);
         }
-        if (totalPaymentAmount.compareTo(invoiceAmount)!=0)
+        if (totalPaymentAmount.compareTo(invoiceAmount) != 0)
             throw new BusinessException("The total payment amount should equal to the invoice amount!");
-        for (Payment payment: payments) {
+        for (Payment payment : payments) {
             paymentMapper.insertPayment(payment);
         }
         customerVehicleMapper.setOrderStatus(customerVehicleId, CustomerVehicle.PAID);
@@ -108,11 +117,11 @@ public class OrderServiceImpl implements OrderService {
         if (uncompletedOrders == null)
             return true;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        for (CustomerVehicle order: uncompletedOrders) {
+        for (CustomerVehicle order : uncompletedOrders) {
             LocalDateTime reservedPickUpDate = LocalDateTime.parse(order.getPickUpDate(), formatter);
             LocalDateTime reservedDropOffDate = LocalDateTime.parse(order.getDropOffDate(), formatter);
             //reserved: pick_up_date <= #{dropOffDate} && drop_off_date >= #{pickUpDate}
-            if (pickUpDate.compareTo(reservedDropOffDate)<=0 && dropOffDate.compareTo(reservedPickUpDate)>=0)
+            if (pickUpDate.compareTo(reservedDropOffDate) <= 0 && dropOffDate.compareTo(reservedPickUpDate) >= 0)
                 return false;
         }
         return true;

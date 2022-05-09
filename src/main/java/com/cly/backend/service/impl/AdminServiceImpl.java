@@ -4,6 +4,7 @@ import com.cly.backend.entity.Coupon;
 import com.cly.backend.entity.Customer;
 import com.cly.backend.entity.CustomerVehicle;
 import com.cly.backend.exception.BusinessException;
+import com.cly.backend.form.AdminRegisterForm;
 import com.cly.backend.mapper.CorporateMapper;
 import com.cly.backend.mapper.CouponMapper;
 import com.cly.backend.mapper.CustomerMapper;
@@ -12,6 +13,7 @@ import com.cly.backend.service.AdminService;
 import com.cly.backend.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,15 +31,22 @@ public class AdminServiceImpl implements AdminService {
     private CorporateMapper corporateMapper;
 
     @Override
-    public Long adminRegister(String username, String password) {
+    @Transactional
+    public Long adminRegister(AdminRegisterForm form) throws BusinessException{
+        if (customerMapper.checkUsername(form.getUsername()) >= 1)
+            throw new BusinessException("Duplicated username!");
+        if (customerMapper.checkEmail(form.getEmail()) >= 1)
+            throw new BusinessException("Duplicated email!");
+        if (customerMapper.checkPhoneNumber(form.getPhoneNumber()) >= 1)
+            throw new BusinessException("Duplicated phone number!");
         Customer admin = new Customer();
-        admin.setUsername(username);
+        admin.setUsername(form.getUsername());
         String salt = ShiroUtils.randomSalt();
         admin.setSalt(salt);
-        admin.setPassword(ShiroUtils.Sha256Hash(password, salt));
+        admin.setPassword(ShiroUtils.Sha256Hash(form.getPassword(), salt));
         admin.setCustomerType(Customer.ADMIN);
-        admin.setEmail("");
-        admin.setPhoneNumber("");
+        admin.setEmail(form.getEmail());
+        admin.setPhoneNumber(form.getPhoneNumber());
         customerMapper.customerRegister(admin);
         return admin.getId();
     }

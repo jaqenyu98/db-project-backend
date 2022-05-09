@@ -63,5 +63,8 @@
         set status = #{status}
         where id = #{id}
     </update>
+    <select id="getOrderById" resultType="CustomerVehicle">
+        select * from cly_customer_vehicle where id=#{id}
+    </select>
 
 </mapper>

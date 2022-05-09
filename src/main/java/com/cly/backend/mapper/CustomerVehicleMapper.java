@@ -16,4 +16,5 @@ public interface CustomerVehicleMapper {
     List<CustomerVehicle> listPaidOrders(Long customerId);
     List<CustomerVehicle> listUncompletedOrdersByVehicleId(Long vehicleId);
     void setOrderStatus(Long id, Integer status);
+    CustomerVehicle getOrderById(Long id);
 }

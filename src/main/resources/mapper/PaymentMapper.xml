@@ -4,7 +4,7 @@
     <select id="listPaymentsByInvoiceId" resultType="Payment">
         select * from cly_payment where invoice_id = #{invoiceId}
     </select>
-    <insert id="insertPayment">
-        insert into cly_payment values (#{id}, #{method}, #{paymentDate}, #{cardNumber}, #{invoiceId}, #{amount})
+    <insert id="insertPayment" keyProperty="id" useGeneratedKeys="true">
+        insert into cly_payment values (null, #{method}, #{paymentDate}, #{cardNumber}, #{invoiceId}, #{amount})
     </insert>
 </mapper>

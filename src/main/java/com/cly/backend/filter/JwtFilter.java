@@ -42,7 +42,7 @@ public class JwtFilter extends BearerHttpAuthenticationFilter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Authorization");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers","*");
         httpServletResponse.setHeader("Access-Control-Max-Age", "86400");
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name()))
         {

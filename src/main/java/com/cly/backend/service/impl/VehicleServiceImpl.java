@@ -17,5 +17,9 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> listVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate) {
         return vehicleMapper.listVehiclesByFilter(locationId, pickUpDate, dropOffDate);
     }
+    @Override
+    public List<Vehicle> listSortedVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate) {
+        return vehicleMapper.listSortedVehiclesByFilter(locationId, pickUpDate, dropOffDate);
+    }
 
 }

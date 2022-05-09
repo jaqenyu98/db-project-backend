@@ -3,6 +3,7 @@ package com.cly.backend.controller;
 import com.cly.backend.entity.Coupon;
 import com.cly.backend.entity.JwtUser;
 import com.cly.backend.exception.BusinessException;
+import com.cly.backend.form.AdminRegisterForm;
 import com.cly.backend.service.AdminService;
 import com.cly.backend.util.JwtUtils;
 import com.cly.backend.util.Result;
@@ -30,13 +31,10 @@ public class AdminController {
     private JwtUtils jwtUtils;
 
     @ApiOperation("Register for administrators.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "password", dataTypeClass = String.class)
-    })
+    @ApiImplicitParam(name = "json", dataTypeClass = AdminRegisterForm.class)
     @PostMapping("register")
-    public Result<Map<String, String>> adminRegister(@RequestParam String username, @RequestParam String password) {
-        Long id = adminService.adminRegister(username, password);
+    public Result<Map<String, String>> adminRegister(@Validated @RequestBody AdminRegisterForm form) {
+        Long id = adminService.adminRegister(form);
         JwtUser jwtUser = new JwtUser(id, "admin");
         String jwtToken = jwtUtils.createToken(jwtUser);
         Map<String, String> map = new HashMap<>();

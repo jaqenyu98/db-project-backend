@@ -1,16 +1,16 @@
 package com.cly.backend.controller;
 
 import com.cly.backend.entity.CustomerVehicle;
-import com.cly.backend.entity.Payment;
 import com.cly.backend.form.OrderForm;
+import com.cly.backend.form.PaymentsForm;
 import com.cly.backend.service.OrderService;
 import com.cly.backend.util.Result;
 import com.cly.backend.util.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class OrderController {
     @ApiOperation("Reserve vehicles for customers")
     @ApiImplicitParam(name = "json", dataTypeClass = OrderForm.class)
     @PostMapping("reserve")
-    public Result reserveOrder(@RequestBody OrderForm form) {
+    public Result reserveOrder(@Validated @RequestBody OrderForm form) {
         Long customerId = ShiroUtils.getId();
         orderService.reserve(customerId, form);
         return Result.success();
@@ -61,13 +61,10 @@ public class OrderController {
     }
 
     @ApiOperation("Make payments for dropped off orders.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "customerVehicleId", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "payments", value = "List of payments.")
-    })
+    @ApiImplicitParam(name = "json", value = "All the payment id should be null. It's auto-increment.", dataTypeClass = PaymentsForm.class)
     @PostMapping("payments")
-    public Result makePayments(@RequestParam Long customerVehicleId, @RequestBody List<Payment> payments) {
-        orderService.makePayments(customerVehicleId, payments);
+    public Result makePayments(@Validated @RequestBody PaymentsForm form) {
+        orderService.makePayments(form.getCustomerVehicleId(), form.getPayments());
         return Result.success();
     }
 }

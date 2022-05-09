@@ -24,9 +24,16 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @ApiOperation("List all available vehicles according to customer's pick up location, pick up date and drop off date.")
-    @ApiImplicitParam(name = "json", value = "Date format: yyyy-MM-dd HH:mm:ss.", dataTypeClass = AvailableVehiclesFilterForm.class)
+    @ApiImplicitParam(name = "json", dataTypeClass = AvailableVehiclesFilterForm.class)
     @PostMapping
     public Result<List<Vehicle>> listVehiclesByFilter(@Validated @RequestBody AvailableVehiclesFilterForm form){
         return Result.success(vehicleService.listVehiclesByFilter(form.getLocationId(), form.getPickUpDate(), form.getDropOffDate()));
+    }
+
+    @ApiOperation("List all available vehicles sorted by daily rate.")
+    @ApiImplicitParam(name = "json", dataTypeClass = AvailableVehiclesFilterForm.class)
+    @PostMapping("sorted")
+    public Result<List<Vehicle>> listSortedAvailableVehicles(@Validated @RequestBody AvailableVehiclesFilterForm form){
+        return Result.success(vehicleService.listSortedVehiclesByFilter(form.getLocationId(), form.getPickUpDate(), form.getDropOffDate()));
     }
 }

@@ -1,10 +1,12 @@
 package com.cly.backend.form;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.cly.backend.util.Xss;
 import lombok.Data;
 
 @Data
 public class LoginForm {
+    @Xss
     private String username;
+    @Xss
     private String password;
 }
