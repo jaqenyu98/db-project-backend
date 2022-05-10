@@ -12,6 +12,7 @@ public class Vehicle {
     private String licensePlate;
     private Long locationId;
     private Long vehicleCategoryId;
+    private Integer dailyOdometerLimit;
     private VehicleCategory vehicleCategory;
     private Location location;
 }

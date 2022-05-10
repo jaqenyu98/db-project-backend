@@ -11,6 +11,7 @@
         <result column="license_plate" property="licensePlate"/>
         <result column="location_id" property="locationId"/>
         <result column="vehicle_category_id" property="vehicleCategoryId"/>
+        <result column="daily_odometer_limit" property="dailyOdometerLimit"/>
         <association property="vehicleCategory" javaType="VehicleCategory">
             <id column="id" property="id"/>
             <result column="name" property="name"/>
