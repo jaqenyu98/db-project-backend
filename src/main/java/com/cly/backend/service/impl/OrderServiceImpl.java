@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new BusinessException("This coupon has expired.");
             }
         }
-        order.setStatus(0);
+        order.setStatus(CustomerVehicle.RESERVED);
         customerVehicleMapper.reserve(order);
     }
 

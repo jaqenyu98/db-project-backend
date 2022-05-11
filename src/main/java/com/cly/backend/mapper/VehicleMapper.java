@@ -10,4 +10,5 @@ public interface VehicleMapper {
     List<Vehicle> listVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate);
     List<Vehicle> listSortedVehiclesByFilter(Long locationId, String pickUpDate, String dropOffDate);
     Vehicle getVehicleById(Long id);
+    void updateLocation(Long id, Long dropOffLocationId);
 }

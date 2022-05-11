@@ -43,7 +43,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPhoneNumber(form.getPhoneNumber());
         customer.setCustomerType(Customer.INDIVIDUAL);
         customerMapper.customerRegister(customer);
-
         Individual individual = new Individual();
         individual.setId(customer.getId());
         individual.setFirstName(form.getFirstName());
@@ -52,7 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
         individual.setInsuranceCompanyName(form.getInsuranceCompanyName());
         individual.setInsurancePolicyNumber(form.getInsurancePolicyNumber());
         individualMapper.individualRegister(individual);
-
         return customer.getId();
     }
 
@@ -69,7 +67,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPhoneNumber(form.getPhoneNumber());
         customer.setCustomerType(Customer.CORPORATE);
         customerMapper.customerRegister(customer);
-
         Corporate corporate = new Corporate();
         corporate.setId(customer.getId());
         corporate.setName(form.getName());

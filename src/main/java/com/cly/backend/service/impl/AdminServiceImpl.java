@@ -5,10 +5,7 @@ import com.cly.backend.entity.Customer;
 import com.cly.backend.entity.CustomerVehicle;
 import com.cly.backend.exception.BusinessException;
 import com.cly.backend.form.AdminRegisterForm;
-import com.cly.backend.mapper.CorporateMapper;
-import com.cly.backend.mapper.CouponMapper;
-import com.cly.backend.mapper.CustomerMapper;
-import com.cly.backend.mapper.CustomerVehicleMapper;
+import com.cly.backend.mapper.*;
 import com.cly.backend.service.AdminService;
 import com.cly.backend.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +26,12 @@ public class AdminServiceImpl implements AdminService {
     private CustomerVehicleMapper customerVehicleMapper;
     @Autowired
     private CorporateMapper corporateMapper;
+    @Autowired
+    private VehicleMapper vehicleMapper;
 
     @Override
     @Transactional
-    public Long adminRegister(AdminRegisterForm form) throws BusinessException{
+    public Long adminRegister(AdminRegisterForm form) throws BusinessException {
         if (customerMapper.checkUsername(form.getUsername()) >= 1)
             throw new BusinessException("Duplicated username!");
         if (customerMapper.checkEmail(form.getEmail()) >= 1)
@@ -64,12 +63,20 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateOrderWhenPickUp(Long id, Integer startOdometer) {
+    public void updateOrderWhenPickUp(Long id, Integer startOdometer) throws BusinessException {
+        CustomerVehicle order = customerVehicleMapper.getOrderById(id);
+        if (order == null)
+            throw new BusinessException("Please enter the correct customer_vehicle_id.");
         customerVehicleMapper.updateOrderWhenPickUp(id, startOdometer, CustomerVehicle.PICKED_UP);
     }
 
     @Override
-    public void updateOrderWhenDropOff(Long id, Integer endOdometer) {
+    @Transactional
+    public void updateOrderWhenDropOff(Long id, Integer endOdometer) throws BusinessException {
+        CustomerVehicle order = customerVehicleMapper.getOrderById(id);
+        if (order == null)
+            throw new BusinessException("Please enter the correct customer_vehicle_id.");
+        vehicleMapper.updateLocation(order.getVehicleId(), order.getDropOffLocationId());
         customerVehicleMapper.updateOrderWhenDropOff(id, endOdometer, CustomerVehicle.DROPPED_OFF);
     }
 
